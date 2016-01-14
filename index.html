@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Jovi</title>
+    <style>
+      html,body{
+        width:100%;
+        height:100%;
+      }
+      #word-cloud{
+        width:100%;
+        height:100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="word-cloud">
+
+    </div>
+
+    <script type="text/javascript" src="lib/echarts/echarts.js"></script>
+    <script type="text/javascript">
+        require.config({
+            paths: {
+                echarts: './lib/echarts'
+            }
+        });
+
+        require(
+            [
+                'echarts',
+                'echarts/chart/wordCloud'
+            ],
+            function (ec) {
+
+                var myChart = ec.init(document.getElementById('word-cloud'));
+
+                function createRandomItemStyle() {
+                    return {
+                        normal: {
+                            color: 'rgb(' + [
+                                Math.round(Math.random() * 160),
+                                Math.round(Math.random() * 160),
+                                Math.round(Math.random() * 160)
+                            ].join(',') + ')'
+                        }
+                    };
+                }
+
+                function generateWord(name,value){
+
+                    return {
+                        name:name,
+                        value:value,
+                        itemStyle: createRandomItemStyle()
+                    };
+                }
+                
+                function randomValue(){
+                    return (Math.random()*Math.random())*10000;
+                }
+                
+                function generateWordList(list){
+                   var res = [];
+                   for(var i=0;i<list.length;i++){
+                      res.push(generateWord(list[i],randomValue()));
+                   }
+                   return res;
+                }
+                
+                var tagList = [
+                    'Web Developer',
+                    'Frontend',
+                    'JavaScript',
+                    'ES 2015',
+                    'vanilla.js',
+                    'Node.js',
+                    'ExpressJS',
+                    'KoaJS',
+                    'Angular',
+                    'React',
+                    'Backbone',
+                    'jQuery',
+                    'HTML 5',
+                    'CSS 3',
+                    'Less',
+                    'Sass',
+                    'C#',
+                    'ASP.NET',
+                    'Microsoft .NET',
+                    'WPF',
+                    'Python'
+                ];
+
+                option = {
+                    title: {
+                        text: 'Jovi',
+                        link: 'http://jovi.github.io'
+                    },
+                    tooltip: {
+                        show: false
+                    },
+                    series: [{
+                        name: 'Google Trends',
+                        type: 'wordCloud',
+                        size: ['80%', '80%'],
+                        textRotation : [0, 45, 90, -45],
+                        textPadding: 0,
+                        autoSize: {
+                            enable: true,
+                            minSize: 14
+                        },
+                        data:generateWordList(tagList)
+                    }]
+                };
+                console.info(option)
+                myChart.setOption(option);
+
+            }
+        );
+    </script>
+  </body>
+</html>
